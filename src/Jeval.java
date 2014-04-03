@@ -1,7 +1,10 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +40,7 @@ public class Jeval {
 		File f = new File("ProcClass.java");
 		File f2 = new File("ProcClass.class");
 		FileWriter fw = new FileWriter(f.getAbsolutePath(),false);
-		fw.write(allCommands);
+		fw.write(allCommands.replaceAll("DQUOTE", "\"").replaceAll("SEMICOLON",";"));
 		fw.close();
 		//System.out.println("compiling "+f.getAbsolutePath()+"...");
 		LinkedList<String> compileResults = new LinkedList<String>();
@@ -92,4 +95,26 @@ public class Jeval {
 		}
 		return rtn;
 	}
+        public static String[] readLinesFromStream(InputStream in, int numlines) throws IOException
+        {
+            ArrayList<String> rtn;
+            rtn = new ArrayList<String>();
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            for(int i=0;i<numlines;i++)
+            {
+                String l = br.readLine();
+                if(l!=null){rtn.add(l);}
+                else{break;}
+            }
+            return rtn.toArray(new String[0]);
+        }
+        public static String readLineFromStream(InputStream in) throws IOException
+        {
+            String rtn;
+            String[] rtna = readLinesFromStream(in, 1);
+            if(rtna.length>0){rtn = rtna[0];}
+            else{rtn = "";}
+            return rtn;
+        }
+        
 }
